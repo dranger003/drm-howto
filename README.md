@@ -1,6 +1,6 @@
 drm-howto
 =========
 
-DRM Modesetting
-DRM Double-Buffered Modesetting
-DRM Double-Buffered VSync'ed Modesetting
+DRM Modesetting<br />
+DRM Double-Buffered Modesetting<br />
+DRM Double-Buffered VSync'ed Modesetting<br />
