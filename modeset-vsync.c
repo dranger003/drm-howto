@@ -204,13 +204,53 @@ static int modeset_setup_dev(int fd, drmModeRes *res, drmModeConnector *conn,
 		return -EFAULT;
 	}
 
+	for (int i = 0; i < conn->count_modes; i++) {
+		printf("%d: %ux%u [%s]\n", i, conn->modes[i].hdisplay, conn->modes[i].vdisplay, conn->modes[i].name);
+		printf(
+			"\tclock: %d, vrefresh: %d, flags: %d, type: %d\n",
+			conn->modes[i].clock,
+			conn->modes[i].vrefresh,
+			conn->modes[i].flags,
+			conn->modes[i].type);
+		printf(
+			"\thdisplay: %d, hsync_start: %d, hsync_end: %d, htotal: %d, hskew: %d\n",
+			conn->modes[i].hdisplay,
+			conn->modes[i].hsync_start,
+			conn->modes[i].hsync_end,
+			conn->modes[i].htotal,
+			conn->modes[i].hskew);
+		printf(
+			"\tvdisplay: %d, vsync_start: %d, vsync_end: %d, vtotal: %d, vskew: %d\n",
+			conn->modes[i].vdisplay,
+			conn->modes[i].vsync_start,
+			conn->modes[i].vsync_end,
+			conn->modes[i].vtotal,
+			conn->modes[i].vscan);
+	}
+
+	int mode = 10;
+
 	/* copy the mode information into our device structure and into both
 	 * buffers */
-	memcpy(&dev->mode, &conn->modes[0], sizeof(dev->mode));
-	dev->bufs[0].width = conn->modes[0].hdisplay;
-	dev->bufs[0].height = conn->modes[0].vdisplay;
-	dev->bufs[1].width = conn->modes[0].hdisplay;
-	dev->bufs[1].height = conn->modes[0].vdisplay;
+	memcpy(&dev->mode, &conn->modes[mode], sizeof(dev->mode));
+/*
+	dev->bufs[0].width = conn->modes[mode].hdisplay;
+	dev->bufs[0].height = conn->modes[mode].vdisplay;
+	dev->bufs[1].width = conn->modes[mode].hdisplay;
+	dev->bufs[1].height = conn->modes[mode].vdisplay;
+*/
+	dev->mode.hdisplay = 1900;
+	dev->mode.hsync_start = 2016;
+	dev->mode.hsync_end = 2216;
+	dev->mode.htotal = 2528;
+	dev->mode.vdisplay = 963;
+	dev->mode.vsync_start = 966;
+	dev->mode.vsync_end = 976;
+	dev->mode.vtotal = 999;
+	dev->bufs[0].width = 1900;
+	dev->bufs[0].height = 963;
+	dev->bufs[1].width = 1900;
+	dev->bufs[1].height = 963;
 	fprintf(stderr, "mode for connector %u is %ux%u\n",
 		conn->connector_id, dev->bufs[0].width, dev->bufs[0].height);
 
